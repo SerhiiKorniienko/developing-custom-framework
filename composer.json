@@ -1,5 +1,5 @@
 {
-    "name": "qcumbr/backend",
+    "name": "skorniienko/developing-custom-framework",
     "type": "project",
     "authors": [
         {
@@ -12,5 +12,7 @@
             "App\\": "./src"
         }
     },
-    "require": {}
+    "require": {
+        "psr/container": "^2.0"
+    }
 }
