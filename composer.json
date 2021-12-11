@@ -1,0 +1,16 @@
+{
+    "name": "qcumbr/backend",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Serhii Korniienko",
+            "email": "mr.serhii.korniienko@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "./src"
+        }
+    },
+    "require": {}
+}
