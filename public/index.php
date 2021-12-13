@@ -7,8 +7,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Controllers\AuthController;
 use App\Controllers\ContactController;
 use App\Core\Application;
+use App\Core\Container;
 
-$app = new Application(dirname(__DIR__));
+$container = new Container();
+
+$app = $container->get(Application::class);
+$app->setRootPath(dirname(__DIR__));
 
 $app->router->get('/', 'home');
 $app->router->get('/contact', [ContactController::class, 'view']);

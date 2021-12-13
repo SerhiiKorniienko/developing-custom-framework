@@ -18,15 +18,25 @@ class Application
 
     public static Application $app;
 
-    public function __construct(string $rootPath)
+    public function __construct(
+        Request        $request,
+        Response       $response,
+        BaseController $baseController
+    )
     {
-        self::$ROOT_DIR = $rootPath;
         self::$app = $this;
 
-        $this->request = new Request();
-        $this->response = new Response();
+        $this->request = $request;
+        $this->response = $response;
         $this->router = new Router($this->request, $this->response);
-        $this->controller = new BaseController();
+        $this->controller = $baseController;
+
+        return $this;
+    }
+
+    public function setRootPath(string $rootPath)
+    {
+        self::$ROOT_DIR = $rootPath;
     }
 
     public function run()
