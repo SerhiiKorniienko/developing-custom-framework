@@ -19,10 +19,6 @@ class RegisterModel extends BaseModel
 
     public string $passwordConfirm = '';
 
-    public function __construct()
-    {
-    }
-
     public static function fromRequest(Request $request): RegisterModel
     {
         $input = $request->getBody();

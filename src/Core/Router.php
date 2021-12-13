@@ -6,17 +6,9 @@ namespace App\Core;
 
 class Router
 {
-    public Request $request;
-
-    public Response $response;
-
     protected array $routes = [];
 
-    public function __construct(Request $request, Response $response)
-    {
-        $this->request = $request;
-        $this->response = $response;
-    }
+    public function __construct(public Request $request, public Response $response) {}
 
     public function get(string $path, $callback)
     {

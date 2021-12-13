@@ -8,29 +8,16 @@ class Application
 {
     public static string $ROOT_DIR;
 
-    public BaseController $controller;
-
-    public Router $router;
-
-    public Request $request;
-
-    public Response $response;
-
     public static Application $app;
 
     public function __construct(
-        Request        $request,
-        Response       $response,
-        BaseController $baseController,
-        Router         $router
+        public Request        $request,
+        public Response       $response,
+        public BaseController $controller,
+        public Router         $router
     )
     {
         self::$app = $this;
-
-        $this->request = $request;
-        $this->response = $response;
-        $this->router = $router;
-        $this->controller = $baseController;
 
         return $this;
     }

@@ -16,20 +16,13 @@ class Field
 
     public const TYPE_NUMBER = 'number';
 
-    private BaseModel $model;
-
-    private string $attribute;
-
-    private string $classes;
-
-    private string $type;
-
-    public function __construct(BaseModel $model, string $attribute, $classes)
+    public function __construct(
+        private BaseModel $model,
+        private string    $attribute,
+        private string    $classes,
+        private string    $type = self::TYPE_TEXT
+    )
     {
-        $this->model = $model;
-        $this->attribute = $attribute;
-        $this->classes = $classes;
-        $this->type = self::TYPE_TEXT;
     }
 
     public function password(): self
