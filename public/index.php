@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/Core/helpers.php';
 
 use App\Controllers\AuthController;
 use App\Controllers\ContactController;
@@ -11,8 +12,10 @@ use App\Core\Container;
 
 $container = new Container();
 
-$app = $container->get(Application::class);
-$app->setRootPath(dirname(__DIR__));
+/** @var Application $app */
+$app = app()->setRootPath(dirname(__DIR__))
+    ->initConfig()
+    ->initRouter();
 
 $app->router->get('/', 'home');
 $app->router->get('/contact', [ContactController::class, 'view']);

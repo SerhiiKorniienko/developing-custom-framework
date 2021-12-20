@@ -8,12 +8,19 @@ class BaseController
 {
     protected string $layout = 'main';
 
-    protected function render(string $view, array $params = [])
-    {
-        return Application::$app->router->renderView($view, $params);
+    public function __construct(
+        protected Container $container,
+        protected Request $request,
+        protected Response $response
+    ) {
     }
 
-    protected function setLayout(string $layout)
+    protected function render(string $view, array $params = []): string
+    {
+        return app()->router->renderView($view, $params);
+    }
+
+    protected function setLayout(string $layout): void
     {
         $this->layout = $layout;
     }

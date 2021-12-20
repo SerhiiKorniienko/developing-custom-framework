@@ -27,7 +27,7 @@ class Container implements ContainerInterface
      */
     public function get(string $id): object
     {
-        if (!$this->has($id)) {
+        if (! $this->has($id)) {
             $this->addInstance($id);
         }
 
@@ -36,9 +36,6 @@ class Container implements ContainerInterface
         return $this->resolve($concrete);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $id): bool
     {
         return isset($this->instances[$id]);
@@ -49,10 +46,10 @@ class Container implements ContainerInterface
      */
     private function resolve(string $concrete): object
     {
-        try {
-            $reflection = new \ReflectionClass($concrete);
-        } catch (\ReflectionException $e) {
-            throw new ContainerException("Class {$concrete} is not found.", 1, $e);
+        $reflection = new \ReflectionClass($concrete);
+
+        if (! $reflection->isInstantiable()) {
+            throw new ContainerException("Class {$concrete} is not instantiable.");
         }
 
         $constructor = $reflection->getConstructor();
@@ -61,7 +58,14 @@ class Container implements ContainerInterface
         }
 
         $parameters = $constructor->getParameters();
+        if (! $parameters) {
+            return $reflection->newInstanceWithoutConstructor();
+        }
+
         $dependencies = $this->getDependencies($parameters);
+        if (! $dependencies) {
+            return $reflection->newInstance();
+        }
 
         return $reflection->newInstanceArgs($dependencies);
     }
@@ -81,7 +85,9 @@ class Container implements ContainerInterface
                 if ($parameter->isDefaultValueAvailable()) {
                     $dependencies[] = $parameter->getDefaultValue();
                 } else {
-                    throw new ContainerException(sprintf("Can not resolve class dependency [%s]", $parameter->name));
+                    throw new ContainerException(
+                        sprintf("Can not resolve class dependency, no type hint for [%s]", $parameter->getName())
+                    );
                 }
             } else {
                 $dependencies[] = $this->get($dependency->getName());

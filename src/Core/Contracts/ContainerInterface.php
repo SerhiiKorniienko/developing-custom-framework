@@ -15,8 +15,5 @@ interface ContainerInterface extends \Psr\Container\ContainerInterface
      */
     public function get(string $id): mixed;
 
-    /**
-     * @throws NotFoundExceptionInterface
-     */
     public function has(string $id): bool;
 }

@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.27
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: app
+      MYSQL_USER: foo
+      MYSQL_PASSWORD: bar
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+  app:
+    image: php:8.1.0-fpm
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html/
+    working_dir: /var/www/html/
+    ports:
+      - "8888:80"
+
+volumes:
+  mysql:

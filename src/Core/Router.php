@@ -8,7 +8,14 @@ class Router
 {
     protected array $routes = [];
 
-    public function __construct(public Request $request, public Response $response) {}
+    private BaseController $controller;
+
+    public function __construct(
+        private Container $container,
+        public Request $request,
+        public Response $response
+    ) {
+    }
 
     public function get(string $path, $callback)
     {
@@ -37,8 +44,8 @@ class Router
         }
 
         if (is_array($callback)) {
-            Application::$app->controller = new $callback[0]();
-            $callback[0] = Application::$app->controller;
+            $this->controller = $this->container->get($callback[0]);
+            $callback[0] = $this->controller;
         }
 
         return call_user_func($callback, $this->request);
@@ -61,7 +68,7 @@ class Router
 
     protected function getLayoutContent(): string
     {
-        $layout = Application::$app->controller->getLayout();
+        $layout = isset($this->controller) ? $this->controller->getLayout() : 'main';
 
         ob_start();
         include_once Application::$ROOT_DIR . "/views/layouts/$layout.php";
