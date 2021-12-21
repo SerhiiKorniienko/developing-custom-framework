@@ -6,48 +6,26 @@ namespace App\Core;
 
 use Dotenv\Dotenv;
 
-final class Application extends Container
+final class Application extends Singleton
 {
-    public static string $ROOT_DIR;
+    private static string $ROOT_DIR;
 
-    /**
-     * @var null[]|string[]
-     */
     private array $config;
 
     public Router $router;
 
-    private static self $instance;
-
-    private function __construct()
-    {
-        /** @return Application */
-    }
-
-    private function __clone()
-    {
-        /** @return Application */
-    }
-
-    private function __wakeup()
-    {
-        /** @return Application */
-    }
-
-    public static function getInstance(): self
-    {
-        if (! isset(self::$instance)) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-    }
+    public Database $db;
 
     public function setRootPath(string $rootPath): self
     {
         self::$ROOT_DIR = $rootPath;
 
         return $this;
+    }
+
+    public function getRootPath(): string
+    {
+        return self::$ROOT_DIR;
     }
 
     public function initConfig(string $configPath = null): self
@@ -57,14 +35,32 @@ final class Application extends Container
         return $this;
     }
 
-    public function config($key = null): string|array|null
+    public function config(string $key = null): ?string
     {
-        return $this->config[$key] ?? $this->config;
+        return isset($key) ? $this->getConfigItem($key) : null;
+    }
+
+    public function getConfigItem(?string $key): ?string
+    {
+        return array_key_exists($key, $this->config) ? $this->config[$key] : null;
     }
 
     public function initRouter(): self
     {
         $this->router = $this->get(Router::class);
+
+        return $this;
+    }
+
+    public function initDatabase(): self
+    {
+        $this->db = Database::getInstance();
+
+        $this->db->init([
+            'dsn' => self::getConfigItem('DB_DSN'),
+            'username' => self::getConfigItem('DB_USER'),
+            'password' => self::getConfigItem('DB_PASSWORD'),
+        ]);
 
         return $this;
     }

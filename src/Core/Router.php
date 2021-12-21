@@ -71,7 +71,7 @@ class Router
         $layout = isset($this->controller) ? $this->controller->getLayout() : 'main';
 
         ob_start();
-        include_once Application::$ROOT_DIR . "/views/layouts/$layout.php";
+        include_once app()->getRootPath() . "/views/layouts/$layout.php";
 
         return ob_get_clean();
     }
@@ -83,7 +83,7 @@ class Router
         }
 
         ob_start();
-        include_once Application::$ROOT_DIR . "/views/$view.php";
+        include_once app()->getRootPath() . "/views/$view.php";
 
         return ob_get_clean();
     }
