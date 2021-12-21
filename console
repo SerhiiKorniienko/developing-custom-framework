@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+use App\Core\Application;
+use App\Core\Container;
+
+$container = new Container();
+
+/** @var Application $app */
+$app = app()->setRootPath(__DIR__)
+    ->initConfig()
+    ->initRouter()
+    ->initDatabase();
+
+$app->addCommand(\App\Core\Commands\MigrationUpCommand::class);
+
+$app->resolveCommand($argv[1]);
+
+exit;

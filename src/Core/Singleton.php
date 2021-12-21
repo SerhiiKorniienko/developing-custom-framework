@@ -8,11 +8,9 @@ class Singleton extends Container
 {
     private static array $instances = [];
 
-    protected function __construct() { /** @return Application */ }
+    private function __construct() { /** @return Application */ }
 
     private function __clone() { /** @return Application */ }
-
-    private function __wakeup() { /** @return Application */ }
 
     public static function getInstance(): static
     {

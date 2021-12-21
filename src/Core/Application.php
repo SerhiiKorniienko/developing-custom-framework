@@ -10,7 +10,9 @@ final class Application extends Singleton
 {
     private static string $ROOT_DIR;
 
-    private array $config;
+    private array $config = [];
+
+    private array $commands = [];
 
     public Router $router;
 
@@ -63,6 +65,22 @@ final class Application extends Singleton
         ]);
 
         return $this;
+    }
+
+    public function addCommand(string $command)
+    {
+        $signature = $command::$signature;
+
+        $this->commands[$signature] = $command;
+    }
+
+    public function resolveCommand(string $signature)
+    {
+        if (array_key_exists($signature, $this->commands)) {
+            $command = $this->get($this->commands[$signature]);
+
+            $command->execute();
+        }
     }
 
     public function run()

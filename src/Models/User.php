@@ -7,8 +7,10 @@ namespace App\Models;
 use App\Core\BaseModel;
 use App\Core\Request;
 
-class RegisterModel extends BaseModel
+class UserModel extends BaseModel
 {
+    private string $table = 'users';
+
     public string $firstName = '';
 
     public string $lastName = '';
@@ -19,7 +21,12 @@ class RegisterModel extends BaseModel
 
     public string $passwordConfirm = '';
 
-    public static function fromRequest(Request $request): RegisterModel
+    protected function getTableName(): string
+    {
+        return $this->table;
+    }
+
+    public static function fromRequest(Request $request): UserModel
     {
         $input = $request->getBody();
 

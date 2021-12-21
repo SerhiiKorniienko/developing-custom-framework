@@ -8,7 +8,7 @@ use App\Core\Contracts\Executable;
 
 abstract class BaseCommand implements Executable
 {
-    protected string $signature;
+    public static string $signature;
 
     abstract public function execute();
 }
