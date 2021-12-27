@@ -6,15 +6,14 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Controllers\AuthController;
 use App\Controllers\ContactController;
-use App\Core\Application;
 use App\Core\Container;
 
 $container = new Container();
 
-/** @var Application $app */
 $app = app()->setRootPath(dirname(__DIR__))
     ->initConfig()
     ->initRouter()
+    ->initSession()
     ->initDatabase();
 
 $app->router->get('/', 'home');

@@ -44,6 +44,11 @@
     </div>
 </nav>
 <div class="container">
+    <?php if(app()->session->getFlash('success')): ?>
+        <div class="alert alert-success">
+            <?php echo app()->session->getFlash('success'); ?>
+        </div>
+    <?php endif; ?>
     {{content}}
 </div>
 

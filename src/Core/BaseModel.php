@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-abstract class BaseModel
+use App\Core\ORM\DatabaseModel;
+
+abstract class BaseModel extends DatabaseModel
 {
     public const RULE_REQUIRED = 'required';
     public const RULE_MIN = 'min';
@@ -65,6 +67,28 @@ abstract class BaseModel
 
                 if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
                     $this->addError($attr, self::RULE_MATCH, $rule);
+                }
+
+                if ($ruleName === self::RULE_UNIQUE) {
+                    $class = $rule['class'];
+                    $field = $rule['field'];
+                    $table = $class::getTableName();
+
+                    $statement = app()->db->pdo->prepare("SELECT * FROM $table WHERE $field = :attr;");
+                    $statement->bindValue(':attr', $value);
+
+//                    dd([
+//                        $class = $rule['class'],
+//                        $field = $rule['field'],
+//                        $table = $class::getTableName(),
+//                        $statement,
+//                    ]);
+
+                    $statement->execute();
+
+                    if ($statement->rowCount()) {
+                        $this->addError($attr, self::RULE_UNIQUE);
+                    }
                 }
             }
         }

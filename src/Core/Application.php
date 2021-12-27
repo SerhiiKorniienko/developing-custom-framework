@@ -16,6 +16,8 @@ final class Application extends Singleton
 
     public Router $router;
 
+    public Session $session;
+
     public Database $db;
 
     public function setRootPath(string $rootPath): self
@@ -63,6 +65,13 @@ final class Application extends Singleton
             'username' => self::getConfigItem('DB_USER'),
             'password' => self::getConfigItem('DB_PASSWORD'),
         ]);
+
+        return $this;
+    }
+
+    public function initSession(): self
+    {
+        $this->session = new Session();
 
         return $this;
     }
